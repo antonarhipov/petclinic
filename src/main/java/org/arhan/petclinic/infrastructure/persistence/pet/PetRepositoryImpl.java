@@ -12,11 +12,11 @@ import java.util.List;
  * JPA implementation of PetRepository.
  */
 @Repository
-class PetRepositoryImpl implements PetRepository {
+public class PetRepositoryImpl implements PetRepository {
     
     private final PetJpaRepository jpaRepository;
 
-    PetRepositoryImpl(PetJpaRepository jpaRepository) {
+    public PetRepositoryImpl(PetJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
 

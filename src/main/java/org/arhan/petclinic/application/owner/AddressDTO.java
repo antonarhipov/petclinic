@@ -1,5 +1,7 @@
 package org.arhan.petclinic.application.owner;
 
+import org.arhan.petclinic.domain.owner.Address;
+
 /**
  * DTO for address data in the application layer.
  */
@@ -15,7 +17,7 @@ public record AddressDTO(
      * @param address the domain entity
      * @return the DTO
      */
-    public static AddressDTO fromDomain(org.arhan.petclinic.domain.owner.Address address) {
+    public static AddressDTO fromDomain(Address address) {
         return new AddressDTO(
             address.street(),
             address.city(),

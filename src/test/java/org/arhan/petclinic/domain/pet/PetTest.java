@@ -1,5 +1,6 @@
 package org.arhan.petclinic.domain.pet;
 
+import org.arhan.petclinic.domain.owner.OwnerId;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,9 +1,10 @@
 package org.arhan.petclinic.application.owner;
 
+import org.arhan.petclinic.domain.owner.Owner;
 import java.util.List;
 
 /**
- * Data Transfer Object for Owner entity.
+ * DTO for owner data in the application layer.
  */
 public record OwnerDTO(
     String id,
@@ -18,21 +19,16 @@ public record OwnerDTO(
      * Creates a DTO from a domain entity.
      *
      * @param owner the domain entity
-     * @return a new DTO instance
+     * @return the DTO
      */
-    public static OwnerDTO fromDomain(org.arhan.petclinic.domain.owner.Owner owner) {
+    public static OwnerDTO fromDomain(Owner owner) {
         return new OwnerDTO(
             owner.getId().value(),
             owner.getName().firstName(),
             owner.getName().lastName(),
             owner.getContactInfo().email(),
             owner.getContactInfo().phone(),
-            new AddressDTO(
-                owner.getContactInfo().address().street(),
-                owner.getContactInfo().address().city(),
-                owner.getContactInfo().address().state(),
-                owner.getContactInfo().address().postalCode()
-            ),
+            AddressDTO.fromDomain(owner.getContactInfo().address()),
             owner.getPets().stream()
                 .map(petId -> petId.value())
                 .toList()
@@ -40,12 +36,3 @@ public record OwnerDTO(
     }
 }
 
-/**
- * Nested DTO for address information.
- */
-record AddressDTO(
-    String street,
-    String city,
-    String state,
-    String postalCode
-) {}

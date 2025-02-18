@@ -1,6 +1,9 @@
 package org.arhan.petclinic.infrastructure.persistence.pet;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.arhan.petclinic.domain.owner.OwnerId;
 import org.arhan.petclinic.domain.pet.*;
 import java.time.LocalDate;

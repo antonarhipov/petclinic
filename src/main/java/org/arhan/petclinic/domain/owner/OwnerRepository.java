@@ -1,5 +1,6 @@
 package org.arhan.petclinic.domain.owner;
 
+import org.arhan.petclinic.domain.common.EntityNotFoundException;
 import java.util.Optional;
 
 /**
@@ -11,6 +12,8 @@ public interface OwnerRepository {
      *
      * @param id the ID of the owner to find
      * @return the owner with the given ID
+     * @throws EntityNotFoundException if no owner is found with the given ID
+     * @throws IllegalArgumentException if id is null
      */
     Owner findById(OwnerId id);
 
@@ -18,6 +21,7 @@ public interface OwnerRepository {
      * Saves an owner.
      *
      * @param owner the owner to save
+     * @throws IllegalArgumentException if owner is null
      */
     void save(Owner owner);
 
@@ -26,6 +30,7 @@ public interface OwnerRepository {
      *
      * @param email the email address to search for
      * @return an Optional containing the owner if found, or empty if not found
+     * @throws IllegalArgumentException if email is null or empty
      */
     Optional<Owner> findByEmail(String email);
 }

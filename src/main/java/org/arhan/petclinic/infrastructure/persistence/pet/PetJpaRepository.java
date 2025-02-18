@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Spring Data JPA repository for Pet entities.
  */
-interface PetJpaRepository extends JpaRepository<PetJpaEntity, String> {
+public interface PetJpaRepository extends JpaRepository<PetJpaEntity, String> {
     
     /**
      * Finds all pets owned by the given owner.

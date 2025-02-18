@@ -1,5 +1,6 @@
 package org.arhan.petclinic.domain.pet;
 
+import org.arhan.petclinic.domain.clinic.VeterinarianId;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,5 +76,18 @@ public class MedicalRecord {
 
     public List<Treatment> getTreatments() {
         return Collections.unmodifiableList(treatments);
+    }
+
+    /**
+     * Adds a new treatment to the medical record.
+     *
+     * @param treatment the treatment to add
+     * @throws IllegalArgumentException if treatment is null
+     */
+    public void addTreatment(Treatment treatment) {
+        if (treatment == null) {
+            throw new IllegalArgumentException("Treatment cannot be null");
+        }
+        treatments.add(treatment);
     }
 }

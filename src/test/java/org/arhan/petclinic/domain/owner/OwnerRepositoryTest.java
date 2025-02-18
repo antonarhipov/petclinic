@@ -1,13 +1,24 @@
 package org.arhan.petclinic.domain.owner;
 
 import org.arhan.petclinic.domain.common.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
+import org.arhan.petclinic.infrastructure.persistence.owner.OwnerRepositoryImpl;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Import;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DataJpaTest
+@Import(OwnerRepositoryImpl.class)
 class OwnerRepositoryTest {
     
+    @Autowired
     private OwnerRepository repository;
+    
+    @Autowired
+    private TestEntityManager entityManager;
+
     private static final FullName VALID_NAME = new FullName("John", "Doe");
     private static final Address VALID_ADDRESS = new Address(
         "123 Main St",
@@ -21,11 +32,6 @@ class OwnerRepositoryTest {
         VALID_ADDRESS
     );
 
-    @BeforeEach
-    void setUp() {
-        repository = createRepository();
-    }
-
     @Test
     void shouldSaveAndFindOwnerById() {
         // Given
@@ -34,6 +40,9 @@ class OwnerRepositoryTest {
         
         // When
         repository.save(owner);
+        entityManager.flush();
+        entityManager.clear();
+        
         Owner found = repository.findById(id);
         
         // Then
@@ -41,6 +50,7 @@ class OwnerRepositoryTest {
         assertEquals(id, found.getId());
         assertEquals(VALID_NAME, found.getName());
         assertEquals(VALID_CONTACT, found.getContactInfo());
+        assertTrue(found.getPets().isEmpty());
     }
     
     @Test
@@ -72,9 +82,27 @@ class OwnerRepositoryTest {
         // Given
         Owner owner = Owner.create(OwnerId.generate(), VALID_NAME, VALID_CONTACT);
         repository.save(owner);
+        entityManager.flush();
+        entityManager.clear();
         
         // When
         var found = repository.findByEmail(VALID_CONTACT.email());
+        
+        // Then
+        assertTrue(found.isPresent());
+        assertEquals(owner.getId(), found.get().getId());
+    }
+    
+    @Test
+    void shouldFindOwnerByEmailIgnoringCase() {
+        // Given
+        Owner owner = Owner.create(OwnerId.generate(), VALID_NAME, VALID_CONTACT);
+        repository.save(owner);
+        entityManager.flush();
+        entityManager.clear();
+        
+        // When
+        var found = repository.findByEmail(VALID_CONTACT.email().toUpperCase());
         
         // Then
         assertTrue(found.isPresent());
@@ -110,20 +138,20 @@ class OwnerRepositoryTest {
         OwnerId id = OwnerId.generate();
         Owner originalOwner = Owner.create(id, VALID_NAME, VALID_CONTACT);
         repository.save(originalOwner);
+        entityManager.flush();
+        entityManager.clear();
         
         FullName updatedName = new FullName("Jonathan", "Doe");
         Owner updatedOwner = Owner.create(id, updatedName, VALID_CONTACT);
         
         // When
         repository.save(updatedOwner);
+        entityManager.flush();
+        entityManager.clear();
+        
         Owner found = repository.findById(id);
         
         // Then
         assertEquals(updatedName, found.getName());
-    }
-
-    private OwnerRepository createRepository() {
-        // This will be implemented with the actual repository implementation
-        throw new UnsupportedOperationException("Repository implementation needed");
     }
 }
